@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to FreeBSD",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/kernel/kernel",
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "miDebuggerPath": "${workspaceRoot}/bin/gdb.exe",
+            "MIMode": "gdb",
+            "miDebuggerServerAddress": "localhost:8864"
+        }
+    ]
+}

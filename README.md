@@ -5,10 +5,15 @@ FreeBSD is a free and open-source operating system which the PS4 Orbis OS is bas
 
 Getting started debuging an entire OS can seem like a lot of work but there are a lot of great tools that can help make it easier to get debugging.
 
-## Setup Instructions
+# Setup
+
 [VS Code](https://code.visualstudio.com/) is a cross-platform free and [open-source](https://github.com/Microsoft/vscode) code editor that has suport for many types of [debugger extensions](https://marketplace.visualstudio.com/search?target=vscode&category=Debuggers&sortBy=Downloads).
 
-Using webfreak's [Native Debug](https://marketplace.visualstudio.com/items?itemName=webfreak.debug) extension, we can also debug the FreeBSD kernel on a virtual machine using GDB.
+## Extensions
+
+You can use the [official C\C++ extensions](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) or webfreak's [Native Debug](https://marketplace.visualstudio.com/items?itemName=webfreak.debug) extension to setup GDB debugging.
+
+## Instructions
 
 Thanks to [fail0verflow](https://fail0verflow.com/blog/2012/cve-2012-0217-intel-sysret-freebsd/#kernel-debugging) and [Austin Hanson](http://austinhanson.com/vscode-gdb-and-debugging-an-os) we can break our requirements down to:
 
@@ -56,8 +61,28 @@ The current layout of your folder should now look something like this:
         ...
 ```
 
-Create a `bin` folder inside the main directory `debug-root` and place your `gdb` there (if you're using the repo binaries, place the `bin/gdb-7.10.1/gdb.exe` file inside your `bin` folder), then and set (or copy the file from the `example` directory) your `launch.json` to:
+Create a `bin` folder inside the main directory `debug-root` and place your `gdb` there (if you're using the repo binaries, place the `bin/gdb-7.10.1/gdb.exe` file inside your `bin` folder), then and set (or copy a file from the `examples` directory) your `launch.json` to one of the following:
 
+For the official C/C++ extensions:
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to FreeBSD",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/kernel/kernel",
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "miDebuggerPath": "${workspaceRoot}/bin/gdb.exe",
+            "MIMode": "gdb",
+            "miDebuggerServerAddress": "localhost:8864"
+        }
+    ]
+}
+```
+For Native Debug:
 ```json
 {
     "version": "0.2.0",
@@ -88,11 +113,11 @@ Create a `bin` folder inside the main directory `debug-root` and place your `gdb
 Save the configuration and you should be able to start a debugging session by running your VM and then inside VS Code, press `Ctrl+Shift+D` and selecting the `Attach to FreeBSD` configuration in the top left.  You can press `F5` or press the green arrow next to configuration list to attach to the VM. 
 
 ## Usage
-You can set source line breakpoints with VS Code and you can also display the assembly code directly inside the Debug Console by entering the `display /{n}i $pc`. With this command you can display *`n`* instructions at each step and each breakpoint. For example, to display the next four instructions, including your current address, you can enter `display /4i $pc` in the Debug Console.
+When entering commands using the official extensions, you need to prefix the command with `-exec` but with Native Debug(ND) you do not. You can set source line breakpoints with VS Code and you can also display the assembly code directly inside the Debug Console by entering the `display /{n}i $pc`. With this command you can display *`n`* instructions at each step and each breakpoint. For example, to display the next four instructions, including your current address, you can enter `display /4i $pc` for ND or `-exec display /4i $pc` for the official extensions in the Debug Console.
 
 
 ## Notes
-If you disconnect the debugger and connect again, you might receive this message if it fails to break/stop:
+If you disconnect the debugger and connect again, you might receive this message when using Native Debug if it fails to break/stop:
 
 ```
 Not implemented stop reason (assuming exception): undefined
@@ -105,8 +130,11 @@ __asm __volatile("sti; hlt");
 ```
 then press `Ctrl+Shift+F5` or the `Restart` button. It should now break and let you debug as usual.
 
-## Preview
-![vscodegdb]
+## Official Extensions Preview
+![vscodegdbofficial]
+
+## Native Debug Preview
+![vscodegdbnd]
 
 
 # GDB TUI 
@@ -122,5 +150,7 @@ You can switch TUI views by pressing `Ctrl+X+2`, for example to see the assembly
 ## Preview
 ![gdbtui]
 
-[vscodegdb]: images/vscode-gdb-1.png "GDB Debugging with VS Code"
+[vscodegdbnd]: images/vscode-gdb-1.png "GDB Debugging with Native Debug"
+[vscodegdbofficial]: images/vscode-gdb-2.png "GDB Debugging with Official Tools"
+
 [gdbtui]: images/gdb-tui-fbsd.png "GDB TUI"
