@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    {
+        "name": "Attach to FreeBSD",
+        "type": "gdb",
+        "request": "attach",
+        "executable": "kernel/kernel",
+        "target": "localhost:8864",
+        "remote": true,
+        "gdbpath": "bin/gdb",
+        "cwd": "${workspaceRoot}"
+    }
+    ]
+}
