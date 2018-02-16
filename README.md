@@ -1,7 +1,7 @@
 
 Debugging FreeBSD with VS Code and GDB
 ====
-FreeBSD is a free and open-source operating system which the PS4 Orbis OS is based on (9.0-RELEASE). By debugging the OS directly and reading the source code, you can learn a lot about OS internals. Applying that knowledge to the PS4 can be fun if you're interested in homebrew or understanding how a potential "jailbreak" works. There are several articles detailing how some researchers used their FreeBSD knowledge to develop exploits on the console such as: [(1)](https://cturt.github.io/ps4.html) [(2)](https://fail0verflow.com/blog/2017/ps4-namedobj-exploit/) [(3)](https://github.com/Cryptogenic/Exploit-Writeups/blob/master/PS4/%22NamedObj%22%204.05%20Kernel%20Exploit%20Writeup.md).
+FreeBSD is a free and [open-source](https://github.com/freebsd/freebsd) operating system which the PS4 Orbis OS is based on (9.0-RELEASE). By debugging the OS directly and reading the source code, you can learn a lot about OS internals. Applying that knowledge to the PS4 can be fun if you're interested in homebrew or understanding how a potential "jailbreak" works. There are several articles detailing how some researchers used their FreeBSD knowledge to develop exploits on the console such as: [(1)](https://cturt.github.io/ps4.html) [(2)](https://fail0verflow.com/blog/2017/ps4-namedobj-exploit/) [(3)](https://github.com/Cryptogenic/Exploit-Writeups/blob/master/PS4/%22NamedObj%22%204.05%20Kernel%20Exploit%20Writeup.md).
 
 Getting started debuging an entire OS can seem like a lot of work but there are a lot of great tools that can help make it easier to get debugging.
 
@@ -63,7 +63,7 @@ The current layout of your folder should now look something like this:
 
 Create a `bin` folder inside the main directory `debug-root` and place your `gdb` there (if you're using the repo binaries, place the `bin/gdb-7.10.1/gdb.exe` file inside your `bin` folder), then and set (or copy a file from the `examples` directory) your `launch.json` to one of the following:
 
-For the official C/C++ extensions:
+**For the official C/C++ extensions**:
 ```json
 {
     "version": "0.2.0",
@@ -82,21 +82,21 @@ For the official C/C++ extensions:
     ]
 }
 ```
-For Native Debug:
+**For Native Debug**:
 ```json
 {
     "version": "0.2.0",
     "configurations": [
-    {
-        "name": "Attach to FreeBSD",
-        "type": "gdb",
-        "request": "attach",
-        "executable": "kernel/kernel",
-        "target": "localhost:8864",
-        "remote": true,
-        "gdbpath": "bin/gdb",
-        "cwd": "${workspaceRoot}"
-    }
+        {
+            "name": "Attach to FreeBSD",
+            "type": "gdb",
+            "request": "attach",
+            "executable": "kernel/kernel",
+            "target": "localhost:8864",
+            "remote": true,
+            "gdbpath": "bin/gdb",
+            "cwd": "${workspaceRoot}"
+        }
     ]
 }
 ```
