@@ -23,11 +23,11 @@ Thanks to [fail0verflow](https://fail0verflow.com/blog/2012/cve-2012-0217-intel-
 3. FreeBSD VM
 4. VS Code
 
-This repo contains a pre-built GDB binary for 64-bit Windows, but if you've built a gdb for another OS, it should still work. The version/release is [7.10.1](https://ftp.gnu.org/gnu/gdb/gdb-7.10.1.tar.gz) and it for use with a 64-bit FreeBSD.
+This repo contains pre-built GDB binaries for 64-bit Windows, but if you've built a gdb for another OS, it should still work. These releases are built from [GNU.org](https://ftp.gnu.org/gnu/gdb/) sources. You can use the latest version of GDB, `8.1`, which is included in the repo `bin` folder.
 
 
 1. Install [VS Code](https://code.visualstudio.com/).
-2. Install the debugger extension [here](https://marketplace.visualstudio.com/items?itemName=webfreak.debug) or press `Ctrl+Shift+X` inside VS Code and search for `Native Debug`.
+2. Install the official debugger extension [here](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) or webfreak's [here](https://marketplace.visualstudio.com/items?itemName=webfreak.debug) debugger extension. You can also press `Ctrl+Shift+X` inside VS Code and search for `C\C++` or `Native Debug`.
 3. Enable debugging for your VM. VMware defaults to port `8864`. We enable it by opening the virtual machine's `.vmx` file and adding the line: 
 
 ```
@@ -61,7 +61,7 @@ The current layout of your folder should now look something like this:
         ...
 ```
 
-Create a `bin` folder inside the main directory `debug-root` and place your `gdb` there (if you're using the repo binaries, place the `bin/gdb-7.10.1/gdb.exe` file inside your `bin` folder), then and set (or copy a file from the `examples` directory) your `launch.json` to one of the following:
+Create a `bin` folder inside the main directory `debug-root` and place your `gdb` there (if you're using the repo binaries, extract the `.exe` from `bin/gdb-8.1/gdb.zip` into your `bin` folder), then and set (or copy a file from the `examples` directory) your `launch.json` to one of the following:
 
 **For the official C/C++ extensions**:
 ```json
@@ -113,7 +113,7 @@ Create a `bin` folder inside the main directory `debug-root` and place your `gdb
 Save the configuration and you should be able to start a debugging session by running your VM and then inside VS Code, press `Ctrl+Shift+D` and selecting the `Attach to FreeBSD` configuration in the top left.  You can press `F5` or press the green arrow next to configuration list to attach to the VM. 
 
 ## Usage
-When entering commands using the official extensions, you need to prefix the command with `-exec` but with Native Debug(ND) you do not. You can set source line breakpoints with VS Code and you can also display the assembly code directly inside the Debug Console by entering the `display /{n}i $pc`. With this command you can display *`n`* instructions at each step and each breakpoint. For example, to display the next four instructions, including your current address, you can enter `display /4i $pc` for ND or `-exec display /4i $pc` for the official extensions in the Debug Console.
+When entering commands using the official extensions, you need to prefix the command with `-exec` but with Native Debug you do not. You can set source line breakpoints with VS Code and you can also display the assembly code directly inside the Debug Console by entering the `display /{n}i $pc`. With this command you can display *`n`* instructions at each step and each breakpoint. For example, to display the next four instructions, including your current address, you can enter `display /4i $pc` for ND or `-exec display /4i $pc` for the official extensions in the Debug Console.
 
 
 ## Notes
@@ -138,14 +138,15 @@ then press `Ctrl+Shift+F5` or the `Restart` button. It should now break and let 
 
 
 # GDB TUI 
-If you prefer the native GDB interface, you can also use the TUI version in repo's `bin/gdb-7.10.1-tui/` directory directly. To do so, use the following commands to start and attach to the VM:
+If you prefer the native GDB interface, you can also use the TUI. To do so, use the following commands to start and attach to the VM:
 
 ```
-gdb-tui.exe -q -tui kernel/kernel
+gdb.exe -q -tui kernel/kernel
 (gdb) target remote localhost:8864
 ```
 
 You can switch TUI views by pressing `Ctrl+X+2`, for example to see the assembly instructions. You can switch back to source view with `Ctrl+X+1`.
+
 
 ## Preview
 ![gdbtui]
@@ -154,3 +155,17 @@ You can switch TUI views by pressing `Ctrl+X+2`, for example to see the assembly
 [vscodegdbofficial]: images/vscode-gdb-2.png "GDB Debugging with Official Tools"
 
 [gdbtui]: images/gdb-tui-fbsd.png "GDB TUI"
+
+**Note: The `8.1` GDB binary has an issue that will crash when using the TUI, on the second press of `Ctrl+X+2`, so if you want to use that mode without that bug (seems to works fine otherwise), use the `8.0.1` release instead. `8.1` still works with VS Code.**  
+
+## Information
+
+For more extensive information on debugging, see the References section.
+
+## References
+
+[Debugging - VS Code](https://code.visualstudio.com/docs/editor/debugging)
+
+[MiEngine GitHub](https://github.com/Microsoft/MIEngine)
+
+[C\C++ Extensions Github](https://github.com/Microsoft/vscode-cpptools)
